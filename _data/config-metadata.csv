@@ -3,6 +3,8 @@ title,Title,
 creator,Creator,
 date,Date Created,
 description,Description,
+type_artwork,Type of Artwork,true,
+link,Access Link,,true
 subject,Subjects,true
 location,Location
 latitude,Latitude

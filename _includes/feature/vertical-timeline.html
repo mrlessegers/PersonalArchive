@@ -7,74 +7,42 @@
   <div class="cb-timeline-nodes">
     {% for item in items %}
       {% assign side = forloop.index | modulo: 2 %}
-      
-      {% comment %} Resolve image URL based on CollectionBuilder conventions {% endcomment %}
-      {% assign item_img = "" %}
-      {% if item.image_small %}
-        {% assign item_img = item.image_small | relative_url %}
-      {% elsif item.image_thumb %}
-        {% assign item_img = item.image_thumb | relative_url %}
-      {% elsif item.object_location and item.format contains 'image' %}
-        {% assign item_img = item.object_location | relative_url %}
-      {% endif %}
-
       <div class="cb-timeline-row {% if side == 0 %}row-right{% else %}row-left{% endif %}">
         
-        <!-- Center Spine Step Node -->
+        <!-- Central Step Node -->
         <div class="cb-node-circle">
           <div class="cb-node-inner">
             <span class="cb-node-step">ITEM {{ forloop.index }}</span>
-            <span class="cb-node-year">{{ item.date | slice: 0, 4 }}</span>
+            <span class="cb-node-date">{{ item.date | slice: 0, 4 }}</span>
           </div>
         </div>
 
-        <!-- Interactive Timeline Box -->
+        <!-- Timeline Content Box -->
         <div class="cb-timeline-card">
-          
-          <!-- Persistent Header: Title & Date (Visible in both states) -->
           <div class="cb-card-header">
-            <span class="cb-card-date">{{ item.date }}</span>
-            <h4 class="cb-card-title">{{ item.title }}</h4>
-          </div>
-
-          <!-- DEFAULT STATE: Brief Description -->
-          <div class="cb-default-view">
-            <p class="cb-brief-desc mb-0">
-              {{ item.description | default: "No description provided." | truncatewords: 16 }}
-            </p>
-          </div>
-
-          <!-- HOVER STATE: Full Description, Photo, Location, Creators, Link -->
-          <div class="cb-hover-expanded">
-            {% if item_img != "" %}
-              <div class="cb-photo-wrapper mb-2">
-                <img src="{{ item_img }}" alt="{{ item.title | escape }}" class="cb-featured-img img-fluid rounded" loading="lazy">
-              </div>
+            {% if item.format contains 'image' or item.image_small %}
+              <i class="fas fa-camera cb-icon"></i>
+            {% else %}
+              <i class="fas fa-file-alt cb-icon"></i>
             {% endif %}
+            <h4 class="cb-title">{{ item.title }}</h4>
+          </div>
+          
+          <p class="cb-desc">{{ item.description | truncatewords: 24 }}</p>
 
+          <!-- Extended Metadata: Visible on Hover -->
+          <div class="cb-hover-metadata">
+            <div class="meta-row"><strong>Creator:</strong> {{ item.creator | default: "Unknown" }}</div>
+            <div class="meta-row"><strong>Subject:</strong> {{ item.subject | default: "N/A" }}</div>
             {% if item.location %}
-              <div class="cb-meta-field cb-location">
-                <i class="fas fa-map-marker-alt text-danger me-1"></i>
-                <span><strong>Location:</strong> {{ item.location }}</span>
-              </div>
+              <div class="meta-row"><strong>Location:</strong> {{ item.location }}</div>
             {% endif %}
-
-            <div class="cb-meta-field cb-creators">
-              <i class="fas fa-user-edit text-secondary me-1"></i>
-              <span><strong>Creator:</strong> {{ item.creator | default: "Not recorded" }}</span>
-            </div>
-
-            <div class="cb-full-desc mt-2">
-              <p class="mb-2">{{ item.description }}</p>
-            </div>
-
-            <div class="cb-record-action pt-2">
-              <a href="{{ '/items/' | relative_url | append: item.objectid | append: '.html' }}" class="btn btn-sm btn-dark w-100">
-                View Full Record &rarr;
+            <div class="meta-link-row mt-2">
+              <a href="{{ '/items/' | relative_url | append: item.objectid | append: '.html' }}" class="btn btn-sm btn-outline-dark">
+                View Item Record &rarr;
               </a>
             </div>
           </div>
-
         </div>
 
       </div>

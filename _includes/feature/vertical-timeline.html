@@ -1,0 +1,51 @@
+{%- assign raw_items = site.data[site.metadata] | where_exp: 'item', 'item.date' -%}
+{%- assign items = raw_items | sort: 'date' -%}
+
+<div class="cb-vertical-timeline-wrapper py-5">
+  <div class="cb-timeline-spine"></div>
+
+  <div class="cb-timeline-nodes">
+    {% for item in items %}
+      {% assign side = forloop.index | modulo: 2 %}
+      <div class="cb-timeline-row {% if side == 0 %}row-right{% else %}row-left{% endif %}">
+        
+        <!-- Central Step Node -->
+        <div class="cb-node-circle">
+          <div class="cb-node-inner">
+            <span class="cb-node-step">ITEM {{ forloop.index }}</span>
+            <span class="cb-node-date">{{ item.date | slice: 0, 4 }}</span>
+          </div>
+        </div>
+
+        <!-- Timeline Content Box -->
+        <div class="cb-timeline-card">
+          <div class="cb-card-header">
+            {% if item.format contains 'image' or item.image_small %}
+              <i class="fas fa-camera cb-icon"></i>
+            {% else %}
+              <i class="fas fa-file-alt cb-icon"></i>
+            {% endif %}
+            <h4 class="cb-title">{{ item.title }}</h4>
+          </div>
+          
+          <p class="cb-desc">{{ item.description | truncatewords: 24 }}</p>
+
+          <!-- Extended Metadata: Visible on Hover -->
+          <div class="cb-hover-metadata">
+            <div class="meta-row"><strong>Creator:</strong> {{ item.creator | default: "Unknown" }}</div>
+            <div class="meta-row"><strong>Subject:</strong> {{ item.subject | default: "N/A" }}</div>
+            {% if item.location %}
+              <div class="meta-row"><strong>Location:</strong> {{ item.location }}</div>
+            {% endif %}
+            <div class="meta-link-row mt-2">
+              <a href="{{ '/items/' | relative_url | append: item.objectid | append: '.html' }}" class="btn btn-sm btn-outline-dark">
+                View Item Record &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    {% endfor %}
+  </div>
+</div>

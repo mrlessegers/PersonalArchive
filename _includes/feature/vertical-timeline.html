@@ -27,7 +27,13 @@
             {% endif %}
             <h4 class="cb-title">{{ item.title }}</h4>
           </div>
-          
+
+          <!-- Date directly between Title and Description -->
+        {% if item.date %}
+          <div class="cb-date text-muted mb-2">
+            <small><i class="far fa-calendar-alt me-1 text-primary"></i>{{ item.date }}</small>
+          </div>
+        {% endif %}
           <p class="cb-desc">{{ item.description | truncatewords: 24 }}</p>
 
           <!-- Extended Metadata: Visible on Hover -->

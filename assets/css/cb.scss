@@ -32,15 +32,14 @@ $theme-colors: map-merge(
 
 @import "base", "pages", "custom";
 
-/* Center Timeline Container */
+/* Container & Center Spine */
 .cb-vertical-timeline-wrapper {
   position: relative;
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 40px 10px;
+  padding: 40px 15px;
 }
 
-/* Central Spine Line */
 .cb-timeline-spine {
   position: absolute;
   top: 0;
@@ -52,12 +51,12 @@ $theme-colors: map-merge(
   z-index: 1;
 }
 
-/* Alternating Row Containers */
+/* Rows & Center Circles */
 .cb-timeline-row {
   position: relative;
   display: flex;
   align-items: center;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
   width: 100%;
 }
 
@@ -69,7 +68,6 @@ $theme-colors: map-merge(
   justify-content: flex-end;
 }
 
-/* Center Circular Badges */
 .cb-node-circle {
   position: absolute;
   left: 50%;
@@ -78,52 +76,52 @@ $theme-colors: map-merge(
   height: 80px;
   background: #ffffff;
   border: 4px solid #b0c4de;
-  border-top-color: #2b3a4a; /* Arc visual accent */
+  border-top-color: #2b3a4a;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 3;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .cb-node-inner {
   text-align: center;
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
 .cb-node-step {
   display: block;
   font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
   color: #6c757d;
+  letter-spacing: 0.05em;
 }
 
-.cb-node-date {
-  font-size: 0.85rem;
+.cb-node-year {
+  font-size: 0.95rem;
   font-weight: 800;
   color: #2b3a4a;
 }
 
-/* Content Cards */
+/* Base Card Styling */
 .cb-timeline-card {
   width: 42%;
   background: #ffffff;
-  padding: 20px;
+  padding: 18px 20px;
   border: 1px solid #e9ecef;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   position: relative;
-  transition: all 0.25s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   z-index: 2;
 }
 
-/* Connectors to spine */
+/* Dashed connectors between cards and spine */
 .cb-timeline-row.row-left .cb-timeline-card::after {
   content: "";
   position: absolute;
-  top: 50%;
+  top: 36px;
   right: -20px;
   border-top: 2px dashed #b0c4de;
   width: 20px;
@@ -132,54 +130,106 @@ $theme-colors: map-merge(
 .cb-timeline-row.row-right .cb-timeline-card::after {
   content: "";
   position: absolute;
-  top: 50%;
+  top: 36px;
   left: -20px;
   border-top: 2px dashed #b0c4de;
   width: 20px;
 }
 
-.cb-title {
-  font-size: 1.05rem;
+/* Typography & Default View */
+.cb-card-date {
+  font-size: 0.8rem;
   font-weight: 700;
-  color: #2b3a4a;
-  margin-top: 8px;
+  color: #0d6efd;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-.cb-desc {
-  font-size: 0.85rem;
-  color: #555;
-  margin-bottom: 0;
+.cb-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 4px 0 8px 0;
 }
 
-/* Hover-Reveal Metadata Drawer */
-.cb-hover-metadata {
+.cb-brief-desc {
+  font-size: 0.88rem;
+  color: #555555;
+  line-height: 1.45;
+  transition: opacity 0.2s ease;
+}
+
+/* Hover-Reveal Section */
+.cb-hover-expanded {
   max-height: 0;
   opacity: 0;
   overflow: hidden;
-  transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.2s ease;
-  font-size: 0.8rem;
-  border-top: 1px solid #f1f3f5;
+  transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.2s ease;
+  font-size: 0.85rem;
 }
 
+.cb-photo-wrapper {
+  max-height: 190px;
+  overflow: hidden;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.cb-featured-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+
+.cb-meta-field {
+  margin-top: 6px;
+  color: #495057;
+  font-size: 0.82rem;
+}
+
+.cb-full-desc {
+  font-size: 0.85rem;
+  color: #333333;
+  line-height: 1.4;
+  border-top: 1px solid #f1f3f5;
+  padding-top: 8px;
+}
+
+/* Hover States: Swap brief with full details */
 .cb-timeline-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
   border-color: #ced4da;
+  z-index: 10;
 }
 
-.cb-timeline-card:hover .cb-hover-metadata {
-  max-height: 220px;
+.cb-timeline-card:hover .cb-default-view {
+  display: none; /* Hides brief description on hover */
+}
+
+.cb-timeline-card:hover .cb-hover-expanded {
+  max-height: 800px;
   opacity: 1;
-  margin-top: 14px;
-  padding-top: 10px;
 }
 
-/* Responsive adjustment for phones */
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .cb-timeline-spine { left: 40px; }
-  .cb-node-circle { left: 40px; width: 64px; height: 64px; }
-  .cb-timeline-row.row-left, .cb-timeline-row.row-right { justify-content: flex-end; }
-  .cb-timeline-card { width: calc(100% - 90px); }
+  .cb-timeline-spine {
+    left: 35px;
+  }
+  .cb-node-circle {
+    left: 35px;
+    width: 64px;
+    height: 64px;
+  }
+  .cb-timeline-row.row-left,
+  .cb-timeline-row.row-right {
+    justify-content: flex-end;
+  }
+  .cb-timeline-card {
+    width: calc(100% - 85px);
+  }
   .cb-timeline-row.row-left .cb-timeline-card::after,
   .cb-timeline-row.row-right .cb-timeline-card::after {
     left: -18px;

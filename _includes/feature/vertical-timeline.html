@@ -43,17 +43,36 @@
         </p>
 
           <!-- Extended Metadata: Visible on Hover -->
-          <div class="cb-hover-metadata">
-            <div class="meta-row"><strong>Creator:</strong> {{ item.creator | default: "Unknown" }}</div>
-            {% if item.location %}
-             <div class="meta-row"><strong>Location:</strong> {{ item.location }}</div>
-            {% endif %}
-            <div class="meta-link-row mt-2">
-              <a href="{{ '/items/' | relative_url | append: item.objectid | append: '.html' }}" class="btn btn-sm btn-outline-dark">
-                View Item Record &rarr;
-              </a>
+
+
+          <!-- Extended Metadata: Visible on Hover -->
+            <div class="cb-hover-metadata">
+              
+              {% comment %} Resolve image thumbnail path according to CollectionBuilder conventions {% endcomment %}
+              {% assign item_img = "" %}
+              {% if item.image_small %}
+                {% assign item_img = item.image_small | relative_url %}
+              {% elsif item.image_thumb %}
+                {% assign item_img = item.image_thumb | relative_url %}
+              {% elsif item.object_location and item.format contains 'image' %}
+                {% assign item_img = item.object_location | relative_url %}
+              {% endif %}
+            
+              <!-- Record Thumbnail (Visible only in Hover State) -->
+              {% if item_img != "" %}
+                <div class="cb-hover-thumb my-2">
+                  <img src="{{ item_img }}" alt="{{ item.title | escape }}" class="img-fluid rounded border shadow-sm" style="max-height: 120px; width: 100%; object-fit: cover;" loading="lazy">
+                </div>
+              {% endif %}
+            
+              <!-- Link to Original Item Record Page -->
+              <div class="meta-link-row mt-2">
+                <a href="{{ '/items/' | relative_url | append: item.objectid | append: '.html' }}" class="btn btn-sm btn-outline-dark w-100">
+                  View Event Record &rarr;
+                </a>
+              </div>
+            
             </div>
-          </div>
         </div>
 
       </div>

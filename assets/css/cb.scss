@@ -186,3 +186,22 @@ $theme-colors: map-merge(
     right: auto;
   }
 }
+
+
+/* Standard State: show short text, hide full text */
+.cb-desc-full {
+  display: none;
+}
+
+.cb-desc-short {
+  display: block;
+}
+
+/* Hover State: hide short text, show full text */
+.cb-timeline-card:hover .cb-desc-short {
+  display: none;
+}
+
+.cb-timeline-card:hover .cb-desc-full {
+  display: block;
+}

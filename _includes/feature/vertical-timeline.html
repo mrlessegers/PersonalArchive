@@ -45,45 +45,48 @@
           </p>
 
           <!-- Extended Metadata: Visible on Hover -->
-          <div class="cb-hover-metadata">
-            
-            {% comment %} Determine raw image filename or URL {% endcomment %}
-            {% assign raw_img = "" %}
-            {% if item.object_location %}
-              {% assign raw_img = item.object_location %}
-            {% elsif item.image_small %}
-              {% assign raw_img = item.image_small %}
-            {% elsif item.image_thumb %}
-              {% assign raw_img = item.image_thumb %}
-            {% elsif item.objectid %}
-              {% assign raw_img = item.objectid | append: ".png" %}
-            {% endif %}
 
-            {% comment %} Convert path to direct raw.githubusercontent.com link {% endcomment %}
-            {% assign item_img = "" %}
-            {% if raw_img != "" %}
-              {% if raw_img contains "http" %}
-                {% assign item_img = raw_img | replace: "github.com", "raw.githubusercontent.com" | replace: "/blob/", "/" | remove: "?raw=true" %}
-              {% else %}
-                {% assign item_img = "https://raw.githubusercontent.com/mrlessegers/PersonalArchive/main/objects/Sample/" | append: raw_img %}
+          <!-- Extended Metadata: Visible on Hover -->
+            <div class="cb-hover-metadata">
+              
+              {% comment %} Determine raw image filename or URL {% endcomment %}
+              {% assign raw_img = "" %}
+              {% if item.object_location %}
+                {% assign raw_img = item.object_location %}
+              {% elsif item.image_small %}
+                {% assign raw_img = item.image_small %}
+              {% elsif item.image_thumb %}
+                {% assign raw_img = item.image_thumb %}
+              {% elsif item.objectid %}
+                {% assign raw_img = item.objectid | append: ".png" %}
               {% endif %}
-            {% endif %}
             
-            <!-- Record Thumbnail (Visible only in Hover State) -->
-            {% if item_img != "" %}
-              <div class="cb-hover-thumb my-2">
-                <img src="{{ item_img }}" alt="{{ item.title | escape }}" class="img-thumbnail timeline-thumb img-fluid rounded shadow-sm" loading="lazy">
+              {% comment %} Sanitize path: encode spaces and build valid URL {% endcomment %}
+              {% assign item_img = "" %}
+              {% if raw_img != "" %}
+                {% if raw_img contains "http" %}
+                  {% assign item_img = raw_img | replace: "github.com", "raw.githubusercontent.com" | replace: "/blob/", "/" | remove: "?raw=true" %}
+                {% else %}
+                  {% assign encoded_filename = raw_img | url_encode | replace: "+", "%20" %}
+                  {% assign item_img = "https://raw.githubusercontent.com/mrlessegers/PersonalArchive/main/objects/Sample/" | append: encoded_filename %}
+                {% endif %}
+              {% endif %}
+              
+              <!-- Record Thumbnail (Visible only in Hover State) -->
+              {% if item_img != "" %}
+                <div class="cb-hover-thumb my-2">
+                  <img src="{{ item_img }}" alt="{{ item.title | escape }}" class="img-thumbnail timeline-thumb img-fluid rounded shadow-sm" loading="lazy">
+                </div>
+              {% endif %}
+            
+              <!-- Link to Original Item Record Page -->
+              <div class="meta-link-row mt-2">
+                <a href="{{ '/item.html?id=' | relative_url | append: item.objectid }}" class="btn btn-sm btn-outline-dark w-100">
+                  View Event Record &rarr;
+                </a>
               </div>
-            {% endif %}
-
-            <!-- Link to Original Item Record Page -->
-            <div class="meta-link-row mt-2">
-              <a href="{{ '/item.html?id=' | relative_url | append: item.objectid }}" class="btn btn-sm btn-outline-dark w-100">
-                View Event Record &rarr;
-              </a>
+            
             </div>
-          
-          </div>
         </div>
 
       </div>

@@ -30,18 +30,23 @@
 
           <!-- Date directly between Title and Description -->
         {% if item.date %}
-  <div class="cb-date mb-2">
-    <small><span class="me-1">📅</span>{{ item.date }}</small>
-  </div>
-{% endif %}
-          <p class="cb-desc">{{ item.description | truncatewords: 24 }}</p>
+          <div class="cb-date mb-2 small" style="font-size: 0.75rem;">
+          <small><span class="me-1">📅</span>{{ item.date }}</small>
+          </div>
+        {% endif %}
+          <p class="cb-desc cb-desc-short mb-0">    
+            {{ item.description | truncatewords: 24 }}
+            </p>
+
+          <!-- Full description (Hover State) -->
+        <p class="cb-desc cb-desc-full mb-0">{{ item.description }}
+        </p>
 
           <!-- Extended Metadata: Visible on Hover -->
           <div class="cb-hover-metadata">
             <div class="meta-row"><strong>Creator:</strong> {{ item.creator | default: "Unknown" }}</div>
-            <div class="meta-row"><strong>Subject:</strong> {{ item.subject | default: "N/A" }}</div>
             {% if item.location %}
-              <div class="meta-row"><strong>Location:</strong> {{ item.location }}</div>
+             <div class="meta-row"><strong>Location:</strong> {{ item.location }}</div>
             {% endif %}
             <div class="meta-link-row mt-2">
               <a href="{{ '/items/' | relative_url | append: item.objectid | append: '.html' }}" class="btn btn-sm btn-outline-dark">

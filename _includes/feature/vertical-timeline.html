@@ -12,7 +12,6 @@
         <!-- Central Step Node -->
         <div class="cb-node-circle">
           <div class="cb-node-inner">
-         
             <span class="cb-node-date">{{ item.date | slice: 0, 4 }}</span>
           </div>
         </div>
@@ -29,51 +28,62 @@
           </div>
 
           <!-- Date directly between Title and Description -->
-        {% if item.date %}
-          <div class="cb-date mb-2 small" style="font-size: 0.75rem;">
-          <small><span class="me-1">📅</span>{{ item.date }}</small>
-          </div>
-        {% endif %}
+          {% if item.date %}
+            <div class="cb-date mb-2 small">
+              <span class="me-1">📅</span>{{ item.date }}
+            </div>
+          {% endif %}
+
+          <!-- Truncated Description (Standard State) -->
           <p class="cb-desc cb-desc-short mb-0">    
             {{ item.description | truncatewords: 24 }}
-            </p>
+          </p>
 
-          <!-- Full description (Hover State) -->
-        <p class="cb-desc cb-desc-full mb-0">{{ item.description }}
-        </p>
-
-          <!-- Extended Metadata: Visible on Hover -->
-
+          <!-- Full Description (Hover State) -->
+          <p class="cb-desc cb-desc-full mb-0">
+            {{ item.description }}
+          </p>
 
           <!-- Extended Metadata: Visible on Hover -->
-            <div class="cb-hover-metadata">
-              
-        
-                  {% comment %} Grab full image URL directly from your CSV metadata fields {% endcomment %}
-                      {% assign item_img = "" %}
-                      {% if item.object_location %}
-                        {% assign item_img = item.object_location %}
-                      {% elsif item.image_small %}
-                        {% assign item_img = item.image_small %}
-                      {% elsif item.image_thumb %}
-                        {% assign item_img = item.image_thumb %}
-                      {% endif %}
-                    
-                      <!-- Record Thumbnail (Visible only in Hover State) -->
-                      {% if item_img != "" %}
-                        <div class="cb-hover-thumb my-2">
-                          <img src="{{ item_img }}" alt="{{ item.title | escape }}" class="img-thumbnail timeline-thumb img-fluid rounded shadow-sm" style="max-height: 140px; width: 100%; object-fit: cover;" loading="lazy">
-                        </div>
-                      {% endif %}
-
-              <!-- Link to Original Item Record Page -->
-              <div class="meta-link-row mt-2">
-               <a href="{{ '/item.html?id=' | relative_url | append: item.objectid }}" class="btn btn-sm btn-outline-dark w-100">
-                  View Event Record &rarr;
-                </a>
-              </div>
+          <div class="cb-hover-metadata">
             
+            {% comment %} Determine raw image filename or URL {% endcomment %}
+            {% assign raw_img = "" %}
+            {% if item.object_location %}
+              {% assign raw_img = item.object_location %}
+            {% elsif item.image_small %}
+              {% assign raw_img = item.image_small %}
+            {% elsif item.image_thumb %}
+              {% assign raw_img = item.image_thumb %}
+            {% elsif item.objectid %}
+              {% assign raw_img = item.objectid | append: ".png" %}
+            {% endif %}
+
+            {% comment %} Convert path to direct raw.githubusercontent.com link {% endcomment %}
+            {% assign item_img = "" %}
+            {% if raw_img != "" %}
+              {% if raw_img contains "http" %}
+                {% assign item_img = raw_img | replace: "github.com", "raw.githubusercontent.com" | replace: "/blob/", "/" | remove: "?raw=true" %}
+              {% else %}
+                {% assign item_img = "https://raw.githubusercontent.com/mrlessegers/PersonalArchive/main/objects/Sample/" | append: raw_img %}
+              {% endif %}
+            {% endif %}
+            
+            <!-- Record Thumbnail (Visible only in Hover State) -->
+            {% if item_img != "" %}
+              <div class="cb-hover-thumb my-2">
+                <img src="{{ item_img }}" alt="{{ item.title | escape }}" class="img-thumbnail timeline-thumb img-fluid rounded shadow-sm" loading="lazy">
+              </div>
+            {% endif %}
+
+            <!-- Link to Original Item Record Page -->
+            <div class="meta-link-row mt-2">
+              <a href="{{ '/item.html?id=' | relative_url | append: item.objectid }}" class="btn btn-sm btn-outline-dark w-100">
+                View Event Record &rarr;
+              </a>
             </div>
+          
+          </div>
         </div>
 
       </div>

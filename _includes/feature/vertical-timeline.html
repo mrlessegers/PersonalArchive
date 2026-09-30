@@ -48,23 +48,26 @@
           <!-- Extended Metadata: Visible on Hover -->
             <div class="cb-hover-metadata">
               
-              {% comment %} Resolve image thumbnail path according to CollectionBuilder conventions {% endcomment %}
+        
+              {% comment %} Construct GitHub Raw Image Path {% endcomment %}
+              {% assign gh_base = "https://github.com/mrlessegers/PersonalArchive/blob/main/objects/Sample/" %}
               {% assign item_img = "" %}
-              {% if item.image_small %}
-                {% assign item_img = item.image_small | relative_url %}
-              {% elsif item.image_thumb %}
-                {% assign item_img = item.image_thumb | relative_url %}
-              {% elsif item.object_location and item.format contains 'image' %}
-                {% assign item_img = item.object_location | relative_url %}
-              {% endif %}
             
+              {% if item.object_location %}
+                {% assign item_img = gh_base | append: item.object_location | append: "?raw=true" %}
+              {% elsif item.image_small %}
+                {% assign item_img = gh_base | append: item.image_small | append: "?raw=true" %}
+              {% elsif item.objectid %}
+                {% assign item_img = gh_base | append: item.objectid | append: ".png?raw=true" %}
+              {% endif %}
+
               <!-- Record Thumbnail (Visible only in Hover State) -->
               {% if item_img != "" %}
                 <div class="cb-hover-thumb my-2">
-                  <img src="{{ item_img }}" alt="{{ item.title | escape }}" class="img-fluid rounded border shadow-sm" style="max-height: 120px; width: 100%; object-fit: cover;" loading="lazy">
+                  <img src="{{ item_img }}" alt="{{ item.title | escape }}" class="img-fluid rounded border shadow-sm" style="max-height: 140px; width: 100%; object-fit: cover;" loading="lazy">
                 </div>
               {% endif %}
-            
+
               <!-- Link to Original Item Record Page -->
               <div class="meta-link-row mt-2">
                <a href="{{ '/item.html?id=' | relative_url | append: item.objectid }}" class="btn btn-sm btn-outline-dark w-100">
